@@ -41,3 +41,14 @@ class base_config:
 
         clock = pygame.time.Clock()
         clock.tick(fps)
+
+    def update_screen(self, y_axis_space: list[int]) -> list[int]:
+        """Ensure that space background moves"""
+
+        for i, axis in enumerate(y_axis_space):
+            y_axis_space[i] += 1
+
+            if axis >= 700:
+                y_axis_space[i] = -1150
+
+        return y_axis_space
