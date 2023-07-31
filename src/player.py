@@ -23,7 +23,12 @@ class player:
         key = pygame.key.get_pressed()
 
         if key[pygame.K_a] and self.x_axis >= 55:
-            self.x_axis -= 3
+            self.x_axis -= 4
 
         elif key[pygame.K_d] and self.x_axis <= 665:
-            self.x_axis += 3
+            self.x_axis += 4
+
+    def get_coordinates(self) -> tuple[int, int]:
+        """Method to return the current player coorfinates"""
+
+        return self.x_axis, self.y_axis

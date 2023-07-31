@@ -1,6 +1,7 @@
 import pygame
 from base_config import base_config
 from player import player
+from laser import laser
 
 
 class game_logic:
@@ -8,6 +9,7 @@ class game_logic:
         self.base = base_config(800, 720)
         self.screen = self.base.configure_screen()
         self.player = player(self.screen)
+        self.laser = laser(self.screen)
 
         self.background = self.base.import_background("background_score.png")
         self.space = self.base.import_background("background_space.png")
@@ -29,12 +31,18 @@ class game_logic:
             for space in self.y_axis:
                 self.screen.blit(self.space, (self.x_axis, space))
 
-            self.screen.blit(self.background, (0, 0))
-
             self.y_axis = self.base.update_screen(self.y_axis)
 
             self.player.draw_player()
 
             self.player.move_player()
+
+            self.laser.laser_dict(self.player.get_coordinates())
+
+            self.laser.draw_laser()
+
+            self.laser.move_laser()
+
+            self.screen.blit(self.background, (0, 0))
 
             game_loop = self.base.quit_game()
