@@ -16,7 +16,7 @@ class game_logic:
         self.fps = 60
 
         self.x_axis = 50
-        self.y_axis = [50, -575, -1150]
+        self.y_axis = [50, -500, -1000]
 
     def main_loop(self) -> None:
         """The main loop of the game"""
@@ -24,8 +24,6 @@ class game_logic:
         game_loop = True
 
         while game_loop:
-            pygame.display.update()
-
             self.base.set_frame_rate(self.fps)
 
             for space in self.y_axis:
@@ -45,4 +43,8 @@ class game_logic:
 
             self.screen.blit(self.background, (0, 0))
 
+            self.laser.draw_laser_charge()
+
             game_loop = self.base.quit_game()
+
+            pygame.display.update()

@@ -48,7 +48,7 @@ class base_config:
         for i, axis in enumerate(y_axis_space):
             y_axis_space[i] += 1
 
-            if axis >= 700:
-                y_axis_space[i] = -1150
+            if axis >= 650:
+                y_axis_space[i] = -1000
 
         return y_axis_space
