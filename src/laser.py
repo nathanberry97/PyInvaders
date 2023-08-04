@@ -18,6 +18,8 @@ class laser:
         self.laser_interval = 0
         self.laser_shoot = False
 
+        self.hit_index = []
+
     def laser_dict(self, coordinates: tuple[int, int]):
         """Method to to manage bullet state"""
 
@@ -45,10 +47,18 @@ class laser:
 
             self.display.blit(resize_sprite, (x_axis, y_axis))
 
-    def move_laser(self):
+    def move_laser(self, enemy: dict):
         """Method to move laser"""
 
         for count, coordinates in enumerate(self.manage_lasers):
+            x_axis = coordinates[0]
+            y_axis = coordinates[1]
+            hit = self.__hit_target(x_axis, y_axis, enemy)
+
+            if hit:
+                self.manage_lasers.pop(count)
+                continue
+
             coordinates[1] -= 5
             self.manage_lasers[count] = coordinates
 
@@ -56,6 +66,8 @@ class laser:
                 self.manage_lasers.pop(count)
 
     def draw_laser_charge(self):
+        """Method to draw current laser charge"""
+
         import_sprite = pygame.image.load(self.laser_charge).convert_alpha()
         resize_sprite = pygame.transform.scale_by(import_sprite, self.scale)
 
@@ -64,3 +76,19 @@ class laser:
         for i in range(max_laser_charge - self.current_laser_charge):
             current = self.laser_charge_axis + (i * 5)
             self.display.blit(resize_sprite, (current, 690))
+
+    def __hit_target(self, x, y, enemy) -> bool:
+        """Method to determine if target has been hit"""
+
+        hit = False
+
+        for i in enemy:
+            target_x, target_y = enemy[i].get_coordinates()
+
+            if x > target_x - 45 and x < target_x + 45 and y < target_y + 80:
+                enemy[i].death_animation()
+                enemy.pop(i)
+                hit = True
+                break
+
+        return hit

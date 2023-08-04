@@ -1,6 +1,7 @@
 import pygame
 from base_config import base_config
 from player import player
+from enemy_manager import enemy_manager
 
 
 class game_logic:
@@ -8,6 +9,7 @@ class game_logic:
         self.base = base_config(800, 720)
         self.screen = self.base.configure_screen()
         self.player = player(self.screen)
+        self.enemy_manager = enemy_manager(self.screen)
 
         self.background = self.base.import_background("background_score.png")
         self.space = self.base.import_background("background_space.png")
@@ -21,6 +23,8 @@ class game_logic:
 
         game_loop = True
 
+        self.enemy_manager.create_enemies()
+
         while game_loop:
             self.base.set_frame_rate(self.fps)
 
@@ -31,13 +35,17 @@ class game_logic:
 
             self.player.draw_player()
 
+            self.enemy_manager.draw_enemies()
+
             self.player.move_player()
 
             self.player.laser_dict(self.player.get_coordinates())
 
             self.player.draw_laser()
 
-            self.player.move_laser()
+            enemies = self.enemy_manager.get_enemies_objects()
+
+            self.player.move_laser(enemies)
 
             self.screen.blit(self.background, (0, 0))
 
@@ -48,3 +56,6 @@ class game_logic:
             game_loop = self.base.quit_game()
 
             pygame.display.update()
+
+            if not enemies:
+                self.enemy_manager.create_enemies()
