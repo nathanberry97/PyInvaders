@@ -149,6 +149,9 @@ class enemy:
         sprite_rect = sprite.get_rect(topleft=(x_axis, y_axis))
         self.laser_coordinates[1] += 5
 
-        if sprite_rect.colliderect(player) or y_axis > 700:
+        if sprite_rect.colliderect(player):
             player_object.update_heath()
+            self.laser_coordinates.clear()
+
+        elif y_axis > 700:
             self.laser_coordinates.clear()
