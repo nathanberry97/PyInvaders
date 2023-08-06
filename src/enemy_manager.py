@@ -25,11 +25,12 @@ class enemy_manager:
                 y_axis = 275
                 x_axis = 100
 
-    def draw_enemies(self):
+    def draw_enemies(self, player, object_player):
         """Method to draw enemies in dict to the display"""
 
         for enemy_object in self.enemy_dict:
             self.enemy_dict[enemy_object].draw_enemy()
+            self.enemy_dict[enemy_object].shoot_laser(player, object_player)
 
     def get_enemies_objects(self) -> dict:
         """Method to return enemy dict"""

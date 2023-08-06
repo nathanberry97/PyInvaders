@@ -1,4 +1,5 @@
 import pygame
+import random
 
 
 class enemy:
@@ -9,9 +10,8 @@ class enemy:
         self.count_check = False
 
         self.y_axis_counter = 450
-
-        self.x_axis = x_axis
         self.y_axis = y_axis - self.y_axis_counter
+        self.x_axis = x_axis
         self.scale = 5
 
         self.frame_one = "../assets/alien_one.png"
@@ -19,9 +19,14 @@ class enemy:
         self.frame_three = "../assets/alien_three.png"
         self.frame_four = "../assets/alien_four.png"
 
+        self.rect = pygame.Rect
+
         self.state = 1
         self.update_interval = 100
         self.frame_interval = 0
+
+        self.laser = "../assets/enemy_laser.png"
+        self.laser_coordinates = []
 
     def draw_enemy(self):
         """Method to draw the player on the screen"""
@@ -35,6 +40,7 @@ class enemy:
 
         self.__enemy_start_level_animation()
         self.__enemy_movement()
+        self.rect = resize_sprite.get_rect(topleft=(self.x_axis, self.y_axis))
 
     def death_animation(self):
         """Method to draw death animation for enemy"""
@@ -52,10 +58,10 @@ class enemy:
             sprite = pygame.transform.scale_by(import_sprite, self.scale)
             self.display.blit(sprite, (self.x_axis, self.y_axis))
 
-    def get_coordinates(self):
-        """Method to return the current coordinates"""
+    def get_enemy_rect(self):
+        """Method to return enemy rect"""
 
-        return self.x_axis, self.y_axis
+        return self.rect
 
     def __get_frame(self) -> str:
         """Method to get the current frame of the ship"""
@@ -97,6 +103,7 @@ class enemy:
         if self.count < 50 and self.count_check is not True:
             self.count += 1
             self.x_axis += 0.2
+
             if self.count == 50:
                 self.count_check = True
 
@@ -106,3 +113,42 @@ class enemy:
 
             if self.count == 0:
                 self.count_check = False
+
+    ####################
+    # WORK IN PROGRESS #
+    ####################
+
+    def shoot_laser(self, player, player_object):
+        """Method to draw the laser on the screen"""
+        laser_check = len(self.laser_coordinates)
+        self.__shoot_laser_check(laser_check)
+        import_sprite = pygame.image.load(self.laser).convert_alpha()
+        resize_sprite = pygame.transform.scale_by(import_sprite, self.scale)
+
+        if laser_check > 0:
+            self.__draw_laser(resize_sprite)
+            self.__hit_target(resize_sprite, player, player_object)
+
+    def __shoot_laser_check(self, laser_check: int):
+        """Method to determine if laser has been shoot"""
+
+        shoot = random.randrange(0, 50)
+        if self.y_axis_counter == 0 and laser_check == 0 and shoot == 25:
+            self.laser_coordinates = [self.x_axis + 38, self.y_axis + 75]
+
+    def __draw_laser(self, sprite: pygame.Surface):
+        """Method to draw laser"""
+
+        x_axis, y_axis = self.laser_coordinates[0], self.laser_coordinates[1]
+        self.display.blit(sprite, (x_axis, y_axis))
+
+    def __hit_target(self, sprite: pygame.Surface, player, player_object):
+        """Method which determine if the target has been hit"""
+
+        x_axis, y_axis = self.laser_coordinates[0], self.laser_coordinates[1]
+        sprite_rect = sprite.get_rect(topleft=(x_axis, y_axis))
+        self.laser_coordinates[1] += 5
+
+        if sprite_rect.colliderect(player) or y_axis > 700:
+            player_object.update_heath()
+            self.laser_coordinates.clear()

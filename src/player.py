@@ -33,6 +33,8 @@ class player(laser):
 
         self.display.blit(resize_sprite, (self.x_axis, self.y_axis))
 
+        return resize_sprite.get_rect(topleft=(self.x_axis, self.y_axis))
+
     def draw_life_icon(self):
         """Method to draw the player on the screen"""
 
@@ -47,6 +49,16 @@ class player(laser):
 
             life_axis += 45
             i += 1
+
+    def return_player_life(self):
+        """Method to return the current heath of the player"""
+
+        alive = True
+
+        if self.current_life == 0:
+            alive = False
+
+        return alive
 
     def move_player(self):
         """Method to move the player"""
@@ -63,6 +75,11 @@ class player(laser):
         """Method to return the current player coorfinates"""
 
         return self.x_axis, self.y_axis
+
+    def update_heath(self):
+        """Method to reduce heath once hit"""
+
+        self.current_life -= 1
 
     def __get_frame(self) -> str:
         """Method to get the current frame of the ship"""

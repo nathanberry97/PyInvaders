@@ -33,9 +33,9 @@ class game_logic:
 
             self.y_axis = self.base.update_screen(self.y_axis)
 
-            self.player.draw_player()
+            rect_player = self.player.draw_player()
 
-            self.enemy_manager.draw_enemies()
+            self.enemy_manager.draw_enemies(rect_player, self.player)
 
             self.player.move_player()
 
@@ -54,6 +54,9 @@ class game_logic:
             self.player.draw_life_icon()
 
             game_loop = self.base.quit_game()
+
+            if game_loop:
+                game_loop = self.player.return_player_life()
 
             pygame.display.update()
 

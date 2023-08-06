@@ -13,6 +13,7 @@ class laser:
         self.laser_charge_axis = 645
 
         self.manage_lasers = []
+        self.manage_lasers_rect = {}
 
         self.interval = 1000
         self.laser_interval = 0
@@ -41,19 +42,19 @@ class laser:
         import_sprite = pygame.image.load(self.laser).convert_alpha()
         resize_sprite = pygame.transform.scale_by(import_sprite, self.scale)
 
-        for i in self.manage_lasers:
+        for count, i in enumerate(self.manage_lasers):
             x_axis = i[0] + 37.5
             y_axis = i[1] - 10
 
+            rect = resize_sprite.get_rect(bottomleft=(x_axis, y_axis))
+            self.manage_lasers_rect[count] = rect
             self.display.blit(resize_sprite, (x_axis, y_axis))
 
     def move_laser(self, enemy: dict):
         """Method to move laser"""
 
         for count, coordinates in enumerate(self.manage_lasers):
-            x_axis = coordinates[0]
-            y_axis = coordinates[1]
-            hit = self.__hit_target(x_axis, y_axis, enemy)
+            hit = self.__hit_target(enemy)
 
             if hit:
                 self.manage_lasers.pop(count)
@@ -77,18 +78,20 @@ class laser:
             current = self.laser_charge_axis + (i * 5)
             self.display.blit(resize_sprite, (current, 690))
 
-    def __hit_target(self, x, y, enemy) -> bool:
+    def __hit_target(self, enemy) -> bool:
         """Method to determine if target has been hit"""
 
         hit = False
+        laser_rects = self.manage_lasers_rect
 
         for i in enemy:
-            target_x, target_y = enemy[i].get_coordinates()
-
-            if x > target_x - 45 and x < target_x + 45 and y < target_y + 80:
-                enemy[i].death_animation()
-                enemy.pop(i)
-                hit = True
+            for j in laser_rects:
+                if laser_rects[j].colliderect(enemy[i].get_enemy_rect()):
+                    enemy[i].death_animation()
+                    enemy.pop(i)
+                    hit = True
+                    break
+            if hit:
                 break
 
         return hit
