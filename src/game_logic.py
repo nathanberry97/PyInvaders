@@ -2,6 +2,7 @@ import pygame
 from base_config import base_config
 from player import player
 from enemy_manager import enemy_manager
+from score import score
 
 
 class game_logic:
@@ -9,6 +10,7 @@ class game_logic:
         self.base = base_config(800, 720)
         self.screen = self.base.configure_screen()
         self.player = player(self.screen)
+        self.score = score(self.screen)
         self.enemy_manager = enemy_manager(self.screen)
 
         self.background = self.base.import_background("background_score.png")
@@ -53,12 +55,18 @@ class game_logic:
 
             self.player.draw_life_icon()
 
+            self.enemy_manager.update_score()
+
+            self.score.display_score(self.enemy_manager.get_score())
+
+            self.score.display_level(self.enemy_manager.get_level())
+
             game_loop = self.base.quit_game()
 
             if game_loop:
                 game_loop = self.player.return_player_life()
 
-            pygame.display.update()
-
             if not enemies:
                 self.enemy_manager.create_enemies()
+
+            pygame.display.update()

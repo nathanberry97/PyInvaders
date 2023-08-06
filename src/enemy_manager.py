@@ -6,9 +6,15 @@ class enemy_manager:
     def __init__(self, display: pygame.Surface):
         self.display = display
         self.enemy_dict = {}
+        self.game_level = 0
+        self.score = 0
+        self.privous_enemy_count = 0
 
     def create_enemies(self):
         """Method to create enemies"""
+
+        self.game_level += 1
+        self.privous_enemy_count = 11
 
         x_axis = 100
         y_axis = 75
@@ -32,7 +38,26 @@ class enemy_manager:
             self.enemy_dict[enemy_object].draw_enemy()
             self.enemy_dict[enemy_object].shoot_laser(player, object_player)
 
+    def update_score(self):
+        """Method to update the current score"""
+
+        current_enemy_count = len(self.enemy_dict)
+
+        if current_enemy_count != self.privous_enemy_count:
+            self.score += 5
+            self.privous_enemy_count = current_enemy_count
+
     def get_enemies_objects(self) -> dict:
         """Method to return enemy dict"""
 
         return self.enemy_dict
+
+    def get_level(self) -> int:
+        """Method to return current level"""
+
+        return self.game_level
+
+    def get_score(self) -> int:
+        """Method to return current level"""
+
+        return self.score

@@ -1,5 +1,7 @@
 # PyInvaders
 
+![demo](./demo.gif)
+
 ## Overview
 
 This project is a Space Invaders clone created using Python and pygame.
