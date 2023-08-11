@@ -133,7 +133,7 @@ class enemy:
         """Method to determine if laser has been shoot"""
 
         shoot = random.randrange(0, 10)
-        if self.y_axis_counter == 0 and laser_check == 0 and shoot == 5:
+        if self.y_axis_counter == 0 and laser_check == 0 and shoot == 1:
             self.laser_coordinates = [self.x_axis + 38, self.y_axis + 75]
 
     def __draw_laser(self, sprite: pygame.Surface):

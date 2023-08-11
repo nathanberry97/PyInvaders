@@ -61,3 +61,9 @@ class enemy_manager:
         """Method to return current level"""
 
         return self.score
+
+    def reset_variables(self) -> None:
+        """Method to return current level"""
+
+        self.score = 0
+        self.game_level = 0

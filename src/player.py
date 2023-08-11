@@ -14,8 +14,9 @@ class player(laser):
         self.life_icon = "../assets/life_icon.png"
 
         self.scale = 5
+        self.y_axis_counter = 90
         self.x_axis = 350
-        self.y_axis = 550
+        self.y_axis = 640
 
         self.state = 1
         self.update_interval = 75
@@ -32,6 +33,7 @@ class player(laser):
         resize_sprite = pygame.transform.scale_by(import_sprite, self.scale)
 
         self.display.blit(resize_sprite, (self.x_axis, self.y_axis))
+        self.__player_start_level_animation()
 
         return resize_sprite.get_rect(topleft=(self.x_axis, self.y_axis))
 
@@ -81,6 +83,13 @@ class player(laser):
 
         self.current_life -= 1
 
+    def reset_player(self):
+        """Method to reset players variables"""
+        self.y_axis_counter = 90
+        self.x_axis = 350
+        self.y_axis = 640
+        self.current_life = 3
+
     def __get_frame(self) -> str:
         """Method to get the current frame of the ship"""
 
@@ -104,3 +113,10 @@ class player(laser):
             frame = self.ship_three
 
         return frame
+
+    def __player_start_level_animation(self):
+        """Method to animate the enemy to fly onto the screen"""
+
+        if self.y_axis_counter != 0:
+            self.y_axis_counter -= 3
+            self.y_axis -= 3
